@@ -7,22 +7,11 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// StorageType is used to indicate the type of the storage backing where the content would be stored.
-type StorageType string
-type LibraryType string
-
-const (
-	Datastore  StorageType = "Datastore"
-	Other      StorageType = "Other"
-	Local      LibraryType = "Local"
-	Subscribed LibraryType = "Subscribed"
-)
-
 // StorageBacking describes the default storage backing which is available for the library.
 type StorageBacking struct {
 	// StorageType indicates the type of storage where the content would be stored.
 	// +required
-	StorageType StorageType `json:"storageType"`
+	StorageType string `json:"storageType"`
 
 	// DatastoreID indicates the identifier of the datastore used to store the content in the library for the DATASTORE storageType.
 	// +optional
@@ -51,7 +40,7 @@ type ContentLibraryStatus struct {
 
 	// Type indicates the type of a library in vCenter.
 	// Possible types are Local and Subscribed.
-	LibraryType LibraryType `json:"libraryType,omitempty"`
+	LibraryType string `json:"libraryType,omitempty"`
 
 	// Version is the version number that can identify metadata changes.
 	Version string `json:"version,omitempty"`

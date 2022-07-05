@@ -29,7 +29,7 @@ type ClusterContentLibraryStatus struct {
 
 	// Type indicates the type of a library in vCenter.
 	// Possible types are Local and Subscribed.
-	LibraryType LibraryType `json:"libraryType,omitempty"`
+	LibraryType string `json:"libraryType,omitempty"`
 
 	// Version is the version number that can identify metadata changes.
 	Version string `json:"version,omitempty"`
