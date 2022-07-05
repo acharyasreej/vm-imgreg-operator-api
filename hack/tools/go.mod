@@ -1,4 +1,4 @@
-module github.com/vmware-tanzu/vm-operator-api/hack/tools
+module github.com/acharyasreej/vm-imgreg-operator-api/hack/tools
 
 go 1.13
 

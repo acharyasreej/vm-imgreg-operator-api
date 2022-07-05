@@ -38,7 +38,7 @@ help: ## Display this help
 .PHONY: $(LIST_CTRL)
 list-ctrl: prereqs $(LIST_CTRL) ## Build list sample with controller client
 $(LIST_CTRL): go.mod
-	go build -o $@ github.com/vmware-tanzu/vm-operator-api/hack/samples/controller
+	go build -o $@ github.com/acharyasreej/vm-imgreg-operator-api/hack/samples/controller
 
 ## --------------------------------------
 ##@ Cleanup

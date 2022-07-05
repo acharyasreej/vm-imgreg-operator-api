@@ -1,4 +1,4 @@
-module github.com/vmware-tanzu/vm-operator-api
+module github.com/acharyasreej/vm-imgreg-operator-api
 
 go 1.13
 
