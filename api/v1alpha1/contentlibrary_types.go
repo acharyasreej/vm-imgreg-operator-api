@@ -20,15 +20,11 @@ type StorageBacking struct {
 
 // ContentLibrarySpec defines the desired state of a ContentLibrary.
 type ContentLibrarySpec struct {
-	// LibraryName specifies the name of the content library.
-	// +required
-	LibraryName string `json:"libraryName"`
-
-	// LibraryDescription is a human-readable description for this library.
+	// LibraryDescription is a human-readable description for this library in vCenter.
 	// +optional
 	LibraryDescription string `json:"libraryDescription,omitempty"`
 
-	// StorageBackings indicates the default storage backings which are available for this library.
+	// StorageBackings indicates the default storage backing available for this library in vCenter.
 	// +required
 	StorageBacking StorageBacking `json:"storageBacking"`
 }
@@ -37,6 +33,9 @@ type ContentLibrarySpec struct {
 type ContentLibraryStatus struct {
 	// LibraryUUID is the identifier which uniquely identifies the library in vCenter.
 	LibraryUUID string `json:"libraryUUID,omitempty"`
+
+	// LibraryName specifies the name of the content library in vCenter.
+        LibraryName string `json:"libraryName"`
 
 	// Type indicates the type of a library in vCenter.
 	// Possible types are Local and Subscribed.
@@ -61,7 +60,7 @@ func (contentLibrary *ContentLibrary) SetConditions(conditions Conditions) {
 // +genclient
 // +kubebuilder:object:root=true
 // +kubebuilder:resource:scope=Namespaced,shortName=cl
-// +kubebuilder:printcolumn:name="LibraryName",type="string",JSONPath=".spec.libraryName"
+// +kubebuilder:printcolumn:name="LibraryName",type="string",JSONPath=".status.libraryName"
 // +kubebuilder:printcolumn:name="UUID",type="string",JSONPath=".status.libraryUUID"
 // +kubebuilder:printcolumn:name="LibraryType",type="string",JSONPath=".status.libraryType"
 // +kubebuilder:printcolumn:name="StorageType",type="string",JSONPath=".spec.storageBacking.storageType"

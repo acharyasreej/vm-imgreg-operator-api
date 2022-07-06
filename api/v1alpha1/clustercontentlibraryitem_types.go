@@ -9,13 +9,9 @@ import (
 
 // ClusterContentLibraryItemSpec defines the desired state of a ClusterContentLibraryItem.
 type ClusterContentLibraryItemSpec struct {
-	// ContentLibraryName is the name of the library that contains the library item.
-	// +required
-	ContentLibraryName string `json:"contentLibraryName"`
-
-	// ItemName specifies the name of the content library item
-	// +required
-	ItemName string `json:"itemName"`
+	// ContentLibraryRefName is the name of the ContentLibrary custom resource.
+        // +required
+        ContentLibraryRefName string `json:"contentLibraryRefName"`
 
 	// ItemDescription is a human-readable description for this library item
 	// +optional
@@ -27,13 +23,16 @@ type ClusterContentLibraryItemStatus struct {
 	// ItemUUID is the identifier which uniquely identifies the library item in vCenter
 	ItemUUID string `json:"itemUUID,omitempty"`
 
+	// ItemName specifies the name of the content library item in vCenter
+        ItemName string `json:"itemName"`
+
 	// ItemVersion indicates the version of the library item metadata
 	ItemVersion string `json:"itemVersion,omitempty"`
 
 	// ContentVersion indicates the version of the library item content
 	ContentVersion string `json:"contentVersion,omitempty"`
 
-	// ItemType string indicates the type of the library item
+	// ItemType string indicates the type of the library item in vCenter
 	ItemType string `json:"itemType,omitempty"`
 
 	// Cached indicates if the files are on disk in vCenter
@@ -59,8 +58,8 @@ func (contentLibraryItem *ClusterContentLibraryItem) SetConditions(conditions Co
 // +genclient
 // +kubebuilder:object:root=true
 // +kubebuilder:resource:scope=Cluster,shortName=clusterclitem
-// +kubebuilder:printcolumn:name="LibraryResourceName",type="string",JSONPath=".spec.contentLibraryRef.name"
-// +kubebuilder:printcolumn:name="ItemName",type="string",JSONPath=".spec.itemName"
+// +kubebuilder:printcolumn:name="ContentLibraryRefName",type="string",JSONPath=".spec.contentLibraryRefName"
+// +kubebuilder:printcolumn:name="ItemName",type="string",JSONPath=".status.itemName"
 // +kubebuilder:printcolumn:name="ItemUUID",type="string",JSONPath=".status.itemUUID"
 
 // ClusterContentLibraryItem is the schema for the content library item API at the cluster scope.

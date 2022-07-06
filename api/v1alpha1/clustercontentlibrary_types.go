@@ -9,10 +9,6 @@ import (
 
 // ClusterContentLibrarySpec defines the desired state of a ClusterContentLibrary.
 type ClusterContentLibrarySpec struct {
-	// LibraryName specifies the name of the content library.
-	// +required
-	LibraryName string `json:"libraryName"`
-
 	// LibraryDescription is a human-readable description for this library.
 	// +optional
 	LibraryDescription string `json:"libraryDescription,omitempty"`
@@ -26,6 +22,9 @@ type ClusterContentLibrarySpec struct {
 type ClusterContentLibraryStatus struct {
 	// LibraryUUID is the identifier which uniquely identifies the library in vCenter.
 	LibraryUUID string `json:"libraryUUID,omitempty"`
+
+	// LibraryName specifies the name of the content library in vCenter.
+        LibraryName string `json:"libraryName"`
 
 	// Type indicates the type of a library in vCenter.
 	// Possible types are Local and Subscribed.
@@ -50,7 +49,7 @@ func (contentLibrary *ClusterContentLibrary) SetConditions(conditions Conditions
 // +genclient
 // +kubebuilder:object:root=true
 // +kubebuilder:resource:scope=Cluster,shortName=clustercl
-// +kubebuilder:printcolumn:name="LibraryName",type="string",JSONPath=".spec.libraryName"
+// +kubebuilder:printcolumn:name="LibraryName",type="string",JSONPath=".status.libraryName"
 // +kubebuilder:printcolumn:name="UUID",type="string",JSONPath=".status.libraryUUID"
 // +kubebuilder:printcolumn:name="LibraryType",type="string",JSONPath=".status.libraryType"
 // +kubebuilder:printcolumn:name="StorageType",type="string",JSONPath=".spec.storageBacking.storageType"
