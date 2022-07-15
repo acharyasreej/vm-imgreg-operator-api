@@ -91,7 +91,7 @@ func (contentLibraryItem *ContentLibraryItem) SetConditions(conditions Condition
 // +kubebuilder:printcolumn:name="ItemName",type="string",JSONPath=".status.itemName"
 // +kubebuilder:printcolumn:name="ItemUUID",type="string",JSONPath=".status.itemUUID"
 // +kubebuilder:printcolumn:name="ItemType",type="string",JSONPath=".status.itemType"
-// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+// +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 
 // ContentLibraryItem is the schema for the content library item API.
 type ContentLibraryItem struct {

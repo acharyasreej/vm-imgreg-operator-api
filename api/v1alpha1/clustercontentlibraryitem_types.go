@@ -61,6 +61,7 @@ func (contentLibraryItem *ClusterContentLibraryItem) SetConditions(conditions Co
 // +kubebuilder:printcolumn:name="ContentLibraryRefName",type="string",JSONPath=".spec.contentLibraryRefName"
 // +kubebuilder:printcolumn:name="ItemName",type="string",JSONPath=".status.itemName"
 // +kubebuilder:printcolumn:name="ItemUUID",type="string",JSONPath=".status.itemUUID"
+// +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 
 // ClusterContentLibraryItem is the schema for the content library item API at the cluster scope.
 // Currently, ClusterContentLibraryItem are immutable to end users.

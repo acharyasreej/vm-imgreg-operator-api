@@ -100,6 +100,7 @@ func (contentUploadRequest *ContentUploadRequest) SetConditions(conditions Condi
 // +kubebuilder:printcolumn:name="ItemUUID",type="string",JSONPath=".status.itemUUID"
 // +kubebuilder:printcolumn:name="ItemType",type="string",JSONPath=".status.itemType"
 // +kubebuilder:printcolumn:name="Ready",type="string",JSONPath=".status.ready"
+// +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 
 // ContentUploadRequest is the schema for the content library item content upload request API.
 type ContentUploadRequest struct {

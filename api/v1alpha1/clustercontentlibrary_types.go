@@ -53,6 +53,7 @@ func (contentLibrary *ClusterContentLibrary) SetConditions(conditions Conditions
 // +kubebuilder:printcolumn:name="UUID",type="string",JSONPath=".status.libraryUUID"
 // +kubebuilder:printcolumn:name="LibraryType",type="string",JSONPath=".status.libraryType"
 // +kubebuilder:printcolumn:name="StorageType",type="string",JSONPath=".spec.storageBacking.storageType"
+// +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 
 // ClusterContentLibrary is the schema for the cluster scoped content library API.
 // Currently, ClusterContentLibrary is immutable to end users.
