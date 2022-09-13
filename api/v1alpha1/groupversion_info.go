@@ -10,7 +10,7 @@ import (
 )
 
 // GroupName specifies the group name used to register the objects.
-const GroupName = "vmoperator.vmware.com"
+const GroupName = "imageregistry.vmware.com"
 
 var (
 	// SchemeGroupVersion is group version used to register these objects

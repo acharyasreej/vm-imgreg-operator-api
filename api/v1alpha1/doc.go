@@ -3,5 +3,5 @@
 
 // +k8s:openapi-gen=true
 // +kubebuilder:object:generate=true
-// +groupName=vmoperator.vmware.com
+// +groupName=imageregistry.vmware.com
 package v1alpha1
