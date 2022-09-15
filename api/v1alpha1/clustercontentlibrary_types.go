@@ -94,5 +94,5 @@ type ClusterContentLibraryList struct {
 }
 
 func init() {
-	SchemeBuilder.Register(&ClusterContentLibrary{}, &ClusterContentLibraryList{})
+	RegisterTypeWithScheme(&ClusterContentLibrary{}, &ClusterContentLibraryList{})
 }

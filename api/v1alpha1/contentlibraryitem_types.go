@@ -131,5 +131,5 @@ type ContentLibraryItemList struct {
 }
 
 func init() {
-	SchemeBuilder.Register(&ContentLibraryItem{}, &ContentLibraryItemList{})
+	RegisterTypeWithScheme(&ContentLibraryItem{}, &ContentLibraryItemList{})
 }
