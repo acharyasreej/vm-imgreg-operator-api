@@ -1,9 +1,12 @@
-// Copyright (c) 2022 VMware, Inc. All Rights Reserved.
+// Copyright (c) 2022-2023 VMware, Inc. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 package v1alpha1
 
 import (
+	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/types"
 )
 
 // ContentLibraryItemType is a constant for the type of a content library item in vCenter.
@@ -11,84 +14,79 @@ type ContentLibraryItemType string
 
 const (
 	// ContentLibraryItemTypeOvf indicates an OVF content library item in vCenter.
-	ContentLibraryItemTypeOvf = ContentLibraryItemType("Ovf")
+	ContentLibraryItemTypeOvf ContentLibraryItemType = "OVF"
 
 	// ContentLibraryItemTypeIso indicates an ISO content library item in vCenter.
-	ContentLibraryItemTypeIso = ContentLibraryItemType("Iso")
+	ContentLibraryItemTypeIso ContentLibraryItemType = "ISO"
 )
-
-// ContentLibraryReference contains the information to locate the content library resource.
-type ContentLibraryReference struct {
-	// Name is the name of resource being referenced.
-	// +required
-	Name string `json:"name"`
-
-	// Namespace of the resource being referenced. If empty, cluster scoped resource is assumed.
-	// +optional
-	Namespace string `json:"namespace,omitempty"`
-}
 
 // ContentLibraryItemSpec defines the desired state of a ContentLibraryItem.
 type ContentLibraryItemSpec struct {
 	// UUID is the identifier which uniquely identifies the library item in vCenter. This field is immutable.
 	// +required
-	UUID string `json:"uuid"`
+	UUID types.UID `json:"uuid"`
 }
 
 // ContentLibraryItemStatus defines the observed state of ContentLibraryItem.
 type ContentLibraryItemStatus struct {
 	// Name specifies the name of the content library item in vCenter specified by the user.
-	// +required
-	Name string `json:"name"`
+	// +optional
+	Name string `json:"name,omitempty"`
 
 	// ContentLibraryRef refers to the ContentLibrary custom resource that this item belongs to.
-	// +required
-	ContentLibraryRef ContentLibraryReference `json:"contentLibraryRef"`
+	// +optional
+	ContentLibraryRef *NameAndKindRef `json:"contentLibraryRef,omitempty"`
 
 	// Description is a human-readable description for this library item.
 	// +optional
 	Description string `json:"description,omitempty"`
 
-	// MetadataVersion indicates the version of the library item metadata.
+	// MetadataVersion indicates the version of the library item metadata in vCenter.
 	// This integer value is incremented when the library item properties such as name or description are changed in vCenter.
-	// +required
-	MetadataVersion string `json:"metadataVersion"`
+	// +optional
+	MetadataVersion string `json:"metadataVersion,omitempty"`
 
-	// ContentVersion indicates the version of the library item content.
+	// ContentVersion indicates the version of the library item content in vCenter.
 	// This integer value is incremented when the files comprising the content library item are changed in vCenter.
-	// +required
-	ContentVersion string `json:"contentVersion"`
+	// +optional
+	ContentVersion string `json:"contentVersion,omitempty"`
 
 	// Type string indicates the type of the library item in vCenter.
-	// Possible types are "Ovf" and "Iso".
-	// +required
-	Type ContentLibraryItemType `json:"type"`
-
-	// Size indicates the library item size in bytes
+	// +kubebuilder:validation:Enum=OVF;ISO
 	// +optional
-	Size int32 `json:"size,omitempty"`
+	Type ContentLibraryItemType `json:"type,omitempty"`
+
+	// Size indicates the library item size in bytes in vCenter.
+	// +optional
+	Size resource.Quantity `json:"size,omitempty"`
 
 	// Cached indicates if the library item files are on disk in vCenter.
-	// +required
-	Cached bool `json:"cached"`
+	// +optional
+	Cached bool `json:"cached,omitempty"`
 
 	// Ready denotes that the library item is ready to be used.
-	// +required
-	Ready bool `json:"ready"`
-
-	// CreationTime indicates the date and time when this library item was created.
-	// +required
-	CreationTime string `json:"creationTime"`
-
-	// LastModifiedTime indicates the date and time when this library item was last updated.
-	// This field is updated when the library item properties are changed or the file content is changed.
-	// +required
-	LastModifiedTime string `json:"lastModifiedTime"`
-
-	// LastSyncTime indicates the date and time when this library item was last synchronized.
-	// This field applies only to subscribed library items.
+	// This flag is set only after all the files associated with the content library item
+	// have been uploaded to vCenter.
 	// +optional
-	LastSyncTime string `json:"lastSyncTime,omitempty"`
+	Ready bool `json:"ready,omitempty"`
+
+	// Files represent zero, one or more files belonging to the content library item in vCenter.
+	// +optional
+	// Files []string `json:"files,omitempty"`
+
+	// CreationTime indicates the date and time when this library item was created in vCenter.
+	// +optional
+	CreationTime metav1.Time `json:"creationTime,omitempty"`
+
+	// LastModifiedTime indicates the date and time when this library item was last updated in vCenter.
+	// This field is updated when the library item properties are changed or the file content is changed.
+	// +optional
+	LastModifiedTime metav1.Time `json:"lastModifiedTime,omitempty"`
+
+	// LastSyncTime indicates the date and time when this library item was last synchronized in vCenter.
+	// This field applies only to the library items belonging to the library of Type=Subscribed.
+	// +optional
+	LastSyncTime metav1.Time `json:"lastSyncTime,omitempty"`
 
 	// Conditions describes the current condition information of the ContentLibraryItem.
 	// +optional
@@ -109,8 +107,8 @@ func (contentLibraryItem *ContentLibraryItem) SetConditions(conditions Condition
 // +kubebuilder:printcolumn:name="ContentLibraryRef",type="string",JSONPath=".status.contentLibraryRef.name"
 // +kubebuilder:printcolumn:name="Type",type="string",JSONPath=".status.type"
 // +kubebuilder:printcolumn:name="Ready",type="boolean",JSONPath=".status.ready"
-// +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 // +kubebuilder:printcolumn:name="LastSyncTime",type="string",JSONPath=".status.lastSyncTime"
+// +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 
 // ContentLibraryItem is the schema for the content library item API.
 type ContentLibraryItem struct {
@@ -130,6 +128,38 @@ type ContentLibraryItemList struct {
 	Items           []ContentLibraryItem `json:"items"`
 }
 
+// +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
+// +kubebuilder:resource:scope=Cluster,shortName=cclitem
+// +kubebuilder:printcolumn:name="ClusterContentLibraryRef",type="string",JSONPath=".status.clusterContentLibraryRef"
+// +kubebuilder:printcolumn:name="Type",type="string",JSONPath=".status.type"
+// +kubebuilder:printcolumn:name="Ready",type="boolean",JSONPath=".status.ready"
+// +kubebuilder:printcolumn:name="LastSyncTime",type="string",JSONPath=".status.lastSyncTime"
+// +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
+
+// ClusterContentLibraryItem is the schema for the content library item API at the cluster scope.
+// Currently, ClusterContentLibraryItem are immutable to end users.
+type ClusterContentLibraryItem struct {
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+
+	Spec   ContentLibraryItemSpec   `json:"spec,omitempty"`
+	Status ContentLibraryItemStatus `json:"status,omitempty"`
+}
+
+// +kubebuilder:object:root=true
+
+// ClusterContentLibraryItemList contains a list of ClusterContentLibraryItem.
+type ClusterContentLibraryItemList struct {
+	metav1.TypeMeta `json:",inline"`
+	metav1.ListMeta `json:"metadata,omitempty"`
+	Items           []ClusterContentLibraryItem `json:"items"`
+}
+
 func init() {
-	RegisterTypeWithScheme(&ContentLibraryItem{}, &ContentLibraryItemList{})
+	RegisterTypeWithScheme(
+		&ContentLibraryItem{},
+		&ContentLibraryItemList{},
+		&ClusterContentLibraryItem{},
+		&ClusterContentLibraryItemList{})
 }
